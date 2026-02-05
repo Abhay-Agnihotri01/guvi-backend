@@ -1,0 +1,90 @@
+spring:
+  application:
+    name: echotruth-backend
+  
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:echotruth}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:Abhay7860$}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+      resolve-lazily: true
+
+# Server Configuration
+server:
+  port: ${BACKEND_PORT:8080}
+  error:
+    include-message: always
+    include-stacktrace: never
+    whitelabel:
+      enabled: false
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:your_super_secret_jwt_key_change_in_production_minimum_256_bits}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+# AI Service Configuration
+ai:
+  service:
+    url: ${AI_SERVICE_URL:http://localhost:8000}
+    timeout: 300000
+    mock: ${AI_SERVICE_MOCK:false}
+    retry:
+      max-attempts: 3
+      delay: 1000
+
+# File Upload
+upload:
+  dir: ${UPLOAD_DIR:./uploads}
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+# Logging
+logging:
+  level:
+    com.echotruth: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN
+    org.springframework.security: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/echotruth-backend.log
+
+# OpenAPI Documentation
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
